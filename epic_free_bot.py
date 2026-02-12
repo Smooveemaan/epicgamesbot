@@ -102,6 +102,11 @@ def main():
         if g["id"] in sent:
             continue  # пропускаем уже отправленные
 
+        # Логирование перед отправкой
+        print("Отправка игры:", g["title"])
+        print("URL:", g["url"])
+        print("CHAT_ID:", CHAT_ID)
+
         # Экранируем название игры
         safe_title = html.escape(g["title"])
         url = g["url"]
@@ -127,10 +132,6 @@ def main():
         new_sent.add(g["id"])
 
     save_sent(new_sent)
-
-print("Отправка игры:", g["title"])
-print("URL:", g["url"])
-print("CHAT_ID:", CHAT_ID)
 
 if __name__ == "__main__":
     main()
