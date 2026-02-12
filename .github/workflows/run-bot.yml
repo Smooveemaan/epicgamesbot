@@ -1,32 +1,36 @@
 name: Run Epic Free Bot
 
-# Расписание запуска
+# Когда запускать workflow
 on:
   schedule:
-    - cron: "0 9 * * *" # Каждый день в 09:00 UTC (12:00 МСК)
-  workflow_dispatch:     # Позволяет запускать вручную
+    - cron: '0 10 * * *'  # каждый день в 10:00 UTC (примерно 13:00 МСК)
+  workflow_dispatch:       # возможность запускать вручную
 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      # 1️⃣ Скачиваем репозиторий
+      - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2️⃣ Устанавливаем Python 3.11
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
+      # 3️⃣ Устанавливаем зависимости
       - name: Install dependencies
         run: |
-          python -m venv venv
-          . venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install python-telegram-bot requests
 
+      # 4️⃣ Запускаем бота
       - name: Run bot
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
         run: |
-          . venv/bin/activate
           python epic_free_bot.py
