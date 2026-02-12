@@ -128,5 +128,9 @@ def main():
 
     save_sent(new_sent)
 
+print("Отправка игры:", g["title"])
+print("URL:", g["url"])
+print("CHAT_ID:", CHAT_ID)
+
 if __name__ == "__main__":
     main()
