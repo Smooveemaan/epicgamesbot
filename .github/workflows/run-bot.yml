@@ -2,7 +2,7 @@ name: Run Epic Games Bot
 
 on:
   schedule:
-    - cron: '0 9 * * *' # 9:00 UTC = 12:00 МСК
+    - cron: '05 16 * * *' # 16:05 UTC = 19:05 МСК
   workflow_dispatch:
 
 permissions:
