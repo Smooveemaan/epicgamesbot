@@ -1,36 +1,33 @@
-name: Run Epic Free Bot
+name: Run Epic Games Bot
 
-# Когда запускать workflow
 on:
   schedule:
-    - cron: '0 10 * * *'  # каждый день в 10:00 UTC (примерно 13:00 МСК)
-  workflow_dispatch:       # возможность запускать вручную
+    - cron: '0 9 * * *' # 9:00 UTC = 12:00 МСК
+  workflow_dispatch: # Позволяет запускать вручную через Actions
 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
-
     steps:
-      # 1️⃣ Скачиваем репозиторий
+      # 1. Клонируем репозиторий
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Устанавливаем Python 3.11
-      - name: Set up Python
+      # 2. Устанавливаем Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      # 3️⃣ Устанавливаем зависимости
+      # 3. Устанавливаем зависимости
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install python-telegram-bot==13.15 requests
+          pip install requests python-telegram-bot==13.15
 
-      # 4️⃣ Запускаем бота
+      # 4. Запускаем бота
       - name: Run bot
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-        run: |
-          python epic_free_bot.py
+        run: python epic_free_bot.py
