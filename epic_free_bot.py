@@ -3,9 +3,10 @@ import json
 from datetime import datetime, timezone, timedelta
 from telegram import Bot
 import html
+import os
 
-BOT_TOKEN = "8515517363:AAFKdIAMA210b2TD8FayVpNlohEJ4aC3rlI"
-CHAT_ID = "@epicgamesfrees"
+BOT_TOKEN = os.environ["BOT_TOKEN"]
+CHAT_ID = os.environ["CHAT_ID"]
 
 STATE_FILE = "sent_games.json"
 
