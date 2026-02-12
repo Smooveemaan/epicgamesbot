@@ -3,31 +3,44 @@ name: Run Epic Games Bot
 on:
   schedule:
     - cron: '0 9 * * *' # 9:00 UTC = 12:00 МСК
-  workflow_dispatch: # Позволяет запускать вручную через Actions
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
+
     steps:
-      # 1. Клонируем репозиторий
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Устанавливаем Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      # 3. Устанавливаем зависимости
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install requests python-telegram-bot==13.15
 
-      # 4. Запускаем бота
       - name: Run bot
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python epic_free_bot.py
+
+      - name: Commit sent games state
+        run: |
+          if [ -f sent_games.json ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            git add sent_games.json
+            git commit -m "Update sent games state" || echo "Nothing to commit"
+            git push
+          else
+            echo "sent_games.json not found"
+          fi
