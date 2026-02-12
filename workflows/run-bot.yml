@@ -1,0 +1,32 @@
+name: Run Epic Free Bot
+
+# Расписание запуска
+on:
+  schedule:
+    - cron: "0 9 * * *" # Каждый день в 09:00 UTC (12:00 МСК)
+  workflow_dispatch:     # Позволяет запускать вручную
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          . venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run bot
+        run: |
+          . venv/bin/activate
+          python epic_free_bot.py
